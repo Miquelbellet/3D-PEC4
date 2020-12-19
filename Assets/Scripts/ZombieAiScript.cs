@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,7 +26,6 @@ public class ZombieAiScript : MonoBehaviour
     private bool arrivedInDestination;
     private Vector3 destinationPos;
     private bool dead;
-    private float distance;
 
     void Start()
     {
@@ -47,11 +47,27 @@ public class ZombieAiScript : MonoBehaviour
         if (destinationDistance <= 0.2f) arrivedInDestination = true;
         else arrivedInDestination = false;
 
-        distance = Vector3.Distance(transform.position, player.transform.position);
-        if (distance < foundPlayerRange)
+        var maxDist = Mathf.Infinity;
+        GameObject closePerson = null;
+        float distance = Mathf.Infinity;
+        GameObject[] personsInGame = GameObject.FindGameObjectsWithTag("Person");
+        List<GameObject> tempTanks = personsInGame.ToList();
+        tempTanks.Add(player);
+        personsInGame = tempTanks.ToArray();
+
+        foreach (GameObject civil in personsInGame)
+        {
+            distance = Vector3.Distance(transform.position, civil.transform.position);
+            if (distance < maxDist)
+            {
+                closePerson = civil.gameObject;
+                maxDist = distance;
+            }
+        }
+        if (closePerson != null && distance < foundPlayerRange)
         {
             nearPlayer = true;
-            navMeshZombie.destination = player.transform.position;
+            navMeshZombie.destination = closePerson.transform.position;
             navMeshZombie.speed = 1.6f;
             zombieAnim.speed = 2.5f;
             if (distance < attackRange)
@@ -61,7 +77,14 @@ public class ZombieAiScript : MonoBehaviour
                 {
                     attackingTimer = 0;
                     zombieAnim.SetTrigger("Punch");
-                    player.GetComponent<PlayerController>().playerGetHit(zombieDamage);
+                    if (closePerson.tag == "Player")
+                    {
+                        player.GetComponent<PlayerController>().playerGetHit(zombieDamage);
+                    }
+                    else
+                    {
+                        closePerson.GetComponent<PersonAiScript>().personGetHit(zombieDamage);
+                    }
                 }
             }
         }
