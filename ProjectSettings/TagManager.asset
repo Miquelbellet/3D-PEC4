@@ -9,6 +9,8 @@ TagManager:
   - LifeBox
   - AmmoBox
   - Person
+  - ContainerCamera
+  - PlayerParent
   layers:
   - Default
   - TransparentFX

@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (objectHit.transform.tag == "Enemie")
                 {
-                    objectHit.transform.GetComponent<ZombieAiScript>().ZombieHitted(weaponDamage);
+                    objectHit.transform.GetComponent<enemyAI>().Hit(weaponDamage);
                 }
                 else
                 {
