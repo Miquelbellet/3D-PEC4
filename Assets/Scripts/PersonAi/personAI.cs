@@ -22,6 +22,7 @@ public class personAI : MonoBehaviour
     public GameObject personDeadParticles;
 
     private Rigidbody rgZombie;
+    private AudioSource personAS;
     private bool dead;
 
     void Start()
@@ -29,6 +30,8 @@ public class personAI : MonoBehaviour
         personAnim = GetComponent<Animator>();
         rgZombie = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        personAS = GetComponent<AudioSource>();
+        personAS.volume = PlayerPrefs.GetFloat("SoundsVolume", 1);
 
         waypoints = new Transform[waypointsParent.transform.childCount];
         for (var i = 0; i < waypointsParent.transform.childCount; i++)
@@ -49,8 +52,11 @@ public class personAI : MonoBehaviour
             dead = true;
             rgZombie.isKinematic = true;
             personAnim.SetTrigger("Dead");
-            var particles = Instantiate(personDeadParticles, transform.position + Vector3.up, Quaternion.Euler(0, 0, 0), transform);
-            Destroy(particles, 1f);
+            if (PlayerPrefs.GetInt("ParticleSystem", 1) == 1)
+            {
+                var particles = Instantiate(personDeadParticles, transform.position + Vector3.up, Quaternion.Euler(0, 0, 0), transform);
+                Destroy(particles, 1f);
+            }
             Destroy(gameObject, 1.5f);
             Instantiate(zombiePrefab, transform.position, Quaternion.Euler(0, 0, 0));
         }
@@ -60,6 +66,7 @@ public class personAI : MonoBehaviour
     public void Hit(float damage)
     {
         life = 0;
+        personAS.PlayOneShot(hittedSound);
     }
 
     private void OnTriggerEnter(Collider col)

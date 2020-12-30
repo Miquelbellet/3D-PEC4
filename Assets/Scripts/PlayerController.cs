@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
         gameController = GameObject.FindGameObjectWithTag("GameController");
         animPLayer = GetComponent<Animator>();
         audioSrcPlayer = GetComponent<AudioSource>();
+        audioSrcPlayer.volume = PlayerPrefs.GetFloat("SoundsVolume", 1);
         totalAmmo = maxAmmo;
         currentAmmo = maxCurrentAmmo;
     }

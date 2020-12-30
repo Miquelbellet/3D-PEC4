@@ -25,6 +25,7 @@ public class enemyAI : MonoBehaviour
 
     private GameObject player;
     private Rigidbody rgZombie;
+    private AudioSource zombieAS;
     private bool dead;
 
     void Start()
@@ -33,6 +34,8 @@ public class enemyAI : MonoBehaviour
         zombieAnim = GetComponent<Animator>();
         rgZombie = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        zombieAS = GetComponent<AudioSource>();
+        zombieAS.volume = PlayerPrefs.GetFloat("SoundsVolume", 1);
 
         patrolState = new PatrolState(this);
         alertState = new AlertState(this);
@@ -52,9 +55,13 @@ public class enemyAI : MonoBehaviour
         {
             dead = true;
             rgZombie.isKinematic = true;
+            navMeshAgent.isStopped = true;
             zombieAnim.SetTrigger("Dead");
-            var particles = Instantiate(zombieDeadParticles, transform.position + Vector3.up, Quaternion.Euler(0, 0, 0), transform);
-            Destroy(particles, 1.5f);
+            if (PlayerPrefs.GetInt("ParticleSystem", 1) == 1)
+            {
+                var particles = Instantiate(zombieDeadParticles, transform.position + Vector3.up, Quaternion.Euler(0, 0, 0), transform);
+                Destroy(particles, 1.5f);
+            }
             player.GetComponent<ExtraItemsScript>().DropRandomItem(transform.position);
             Destroy(gameObject, 3f);
         }
@@ -63,12 +70,18 @@ public class enemyAI : MonoBehaviour
 
     public void Hit(float damage)
     {
-        navMeshAgent.isStopped = true;
-        Invoke("ReactivateWalking", 1.5f);
         life -= damage;
-        zombieAnim.SetTrigger("Hitted");
-        var particles = Instantiate(zombieHitParticles, transform.position + Vector3.up, Quaternion.Euler(0, 0, 0), transform);
-        Destroy(particles, 3f);
+        navMeshAgent.isStopped = true;
+        if(life > 0)
+        {
+            Invoke("ReactivateWalking", 1.5f);
+            zombieAnim.SetTrigger("Hitted");
+        }
+        if (PlayerPrefs.GetInt("ParticleSystem", 1) == 1)
+        {
+            var particles = Instantiate(zombieHitParticles, transform.position + Vector3.up, Quaternion.Euler(0, 0, 0), transform);
+            Destroy(particles, 3f);
+        }
         currentState.Impact();
     }
 

@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
+    public GameObject carsParent;
     public GameObject zombiesSpawnPoints;
     public GameObject zombiePrefab;
 
     void Start()
     {
-        InvokeRepeating("SpawnZombie", 0f, Random.Range(10f, 15f));
+        if(PlayerPrefs.GetInt("GenerateZombies", 1) == 1) InvokeRepeating("SpawnZombie", 0f, Random.Range(10f, 15f));
+
+        if (PlayerPrefs.GetInt("EnableCars", 1) == 1) carsParent.SetActive(true);
+        else carsParent.SetActive(false);
     }
 
     void Update()

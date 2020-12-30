@@ -1,8 +1,9 @@
 # PEC3 - Juego de Plataformas 3D
 
-Este proyecto consiste en un juego en tercera persona dónde el jugador tiene que sobrevivir en una ciudad llena de zombis. Estos zombis van deambulando por la ciudad y cuando sienten que el jugador está cerca van hacia él.
+Este proyecto consiste en mejorar la anterior PEC añadiendo una mejor AI y coches para hacer un GTA con zombis.
+El juego es en tercera persona y el jugador tiene que sobrevivir en una ciudad llena de zombis. Estos zombis van deambulando por la ciudad y cuando sienten que el jugador está cerca van hacia él y lo atacan.
 El jugador tiene una pistola para ir matando a los zombis y un temporizador para ver cuanto tiempo ha sobrevivido y poder superar su tiempo en la siguiente partida.
-
+También hay personas caminando por la ciudad y cuando ven a un zombi huyen de él, y si este los atrapa, los ataca y se convierten en zombi.
 
 ## Cómo jugar
 
@@ -29,5 +30,13 @@ Por pantalla se puede ver la vida que le queda al jugador, la munición que le q
 ### Enemigos
 Los enemigos son zombis policías que van caminando hacia puntos aleatorios de la ciudad. Cuando el jugador se acerca demasiado a un zombi, este va hacia él rápidamente y si consigue aproximarse le restará vida al jugador haciendo la animación de atacar.
 
+### Personas
+La ciudad está llena de personas que pasean, si alguna de estas personas se encuentra cerca de un zombi se echa a correr en dirección contraria de donde está él. Si el zombi llega a morderle, se convertirá en uno de ellos.
+
+### Coches
+Hay coches que van circulando por la ciudad siguiendo un circuito que se guarda en la carpeta Assets/Resources. Estos coches cogen el recorrido que tienen que hacer y el tiempo con el que lo tienen que hacer de estos archivos y van recorriendo este camino en bucle hasta que el usuario coge alguno de estos coches.
+También hay coches que siempre están estacionados.
+Todos los coches pueden ser conducidos por el jugador y se puede subir y bajar del coche cuando quiera. Si coge un coche que está circulando de forma autónoma, este dejará de hacer su ruta, ya que simboliza que lo has robado y el conductor ya no está en el vehículo.
+
 ## Vídeo
-[https://youtu.be/X3HypgFxTwU](https://youtu.be/X3HypgFxTwU)
+[https://youtu.be/o-Xc25eDtGc](https://youtu.be/o-Xc25eDtGc)
